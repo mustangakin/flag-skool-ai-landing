@@ -1,8 +1,9 @@
 import { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface WaitlistFormProps {
   variant?: "hero" | "footer";
@@ -11,31 +12,18 @@ interface WaitlistFormProps {
 const WaitlistForm = ({ variant = "hero" }: WaitlistFormProps) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!email.trim()) {
-      toast({
-        title: "Email required",
-        description: "Please enter your email address.",
-        variant: "destructive",
-      });
+      toast.error("Please enter your email address.");
       return;
     }
 
-    setIsLoading(true);
-    
-    // Simulate API call - wire this up to your database
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "You're on the list!",
-      description: "We'll notify you when the cohort opens.",
-    });
-    
-    setEmail("");
-    setIsLoading(false);
+    // Navigate to the full waitlist form page
+    navigate("/waitlist");
   };
 
   return (

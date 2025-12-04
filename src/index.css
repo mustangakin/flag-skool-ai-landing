@@ -16,37 +16,37 @@
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    --primary: 234 89% 59%;
+    --primary: 0 84% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 215 25% 27%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 47%;
 
-    --accent: 234 89% 96%;
-    --accent-foreground: 234 89% 49%;
+    --accent: 0 84% 96%;
+    --accent-foreground: 0 84% 40%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 234 89% 59%;
+    --border: 0 0% 91%;
+    --input: 0 0% 91%;
+    --ring: 0 84% 50%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 215 25% 15%;
-    --sidebar-primary: 234 89% 59%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 0 84% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 234 89% 96%;
-    --sidebar-accent-foreground: 234 89% 49%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 234 89% 59%;
+    --sidebar-accent: 0 84% 96%;
+    --sidebar-accent-foreground: 0 84% 40%;
+    --sidebar-border: 0 0% 91%;
+    --sidebar-ring: 0 84% 50%;
 
-    --chart-1: 234 89% 59%;
+    --chart-1: 0 84% 50%;
     --chart-2: 258 90% 66%;
     --chart-3: 210 98% 78%;
     --chart-4: 190 95% 39%;
@@ -67,5 +67,21 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
   }
 }

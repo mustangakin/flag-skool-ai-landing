@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import VideoSection from "@/components/landing/VideoSection";
 import StackSection from "@/components/landing/StackSection";
 import CurriculumGrid from "@/components/landing/CurriculumGrid";
 import BenefitsSection from "@/components/landing/BenefitsSection";
@@ -12,6 +13,10 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <VideoSection 
+          videoUrl="https://videos.pexels.com/video-files/30333849/13003128_2560_1440_25fps.mp4"
+          title="See Flag Skool in Action"
+        />
         <StackSection />
         <CurriculumGrid />
         <BenefitsSection />

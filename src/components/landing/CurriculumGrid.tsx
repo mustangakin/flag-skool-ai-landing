@@ -1,4 +1,6 @@
 import { Workflow, Mic, Code2, Video } from "lucide-react";
+import ScrollReveal from "@/components/ui/scroll-reveal";
+import Tilt from "react-parallax-tilt";
 
 const curriculum = [
   {
@@ -29,33 +31,45 @@ const curriculum = [
 
 const CurriculumGrid = () => {
   return (
-    <section className="py-20 px-6">
+    <section id="curriculum" className="py-20 px-6">
       <div className="container mx-auto max-w-5xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            What You Will Build
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Hands-on projects using industry-leading AI tools
-          </p>
-        </div>
+        <ScrollReveal direction="down">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+              What You Will Build
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Hands-on projects using industry-leading AI tools
+            </p>
+          </div>
+        </ScrollReveal>
         
         <div className="grid sm:grid-cols-2 gap-6">
-          {curriculum.map((item) => (
-            <div 
-              key={item.title}
-              className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-lg"
-            >
-              <div className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center mb-4`}>
-                <item.icon className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                {item.title}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {item.description}
-              </p>
-            </div>
+          {curriculum.map((item, index) => (
+            <ScrollReveal key={item.title} direction="up" delay={index * 100}>
+              <Tilt
+                tiltMaxAngleX={5}
+                tiltMaxAngleY={5}
+                scale={1.02}
+                transitionSpeed={2500}
+                glareEnable={true}
+                glareMaxOpacity={0.1}
+                glareColor="#ef4444"
+                glarePosition="all"
+              >
+                <div className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 h-full">
+                  <div className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                    <item.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </Tilt>
+            </ScrollReveal>
           ))}
         </div>
       </div>

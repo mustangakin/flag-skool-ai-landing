@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# Flag Skool AI Landing Page
+
+> **⚠️ IMPORTANT FOR ALL AGENTS**: Before starting any work, **MUST READ** [`CONTEXT.md`](./CONTEXT.md) - This is the single source of truth for project state, agent responsibilities, and required updates. All agents must update CONTEXT.md when completing tasks.
 
 ## Project info
 

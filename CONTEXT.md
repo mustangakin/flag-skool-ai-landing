@@ -1,6 +1,6 @@
 # Flag Skool AI Landing Page - Project Context
 
-> **Last Updated**: 2025-01-XX - Initial context document created
+> **Last Updated**: 2025-12-05 - Schema/form options aligned to spec; consent text fixed; .env.example added
 > 
 > **Purpose**: This document serves as the single source of truth for all agents working on this project. All agents MUST read this before starting work and MUST update it when completing tasks.
 
@@ -51,32 +51,11 @@
   - Optional "Submit Another Response" button
 
 #### Form Schema (`src/lib/waitlist-schema.ts`)
-**CURRENT STATE** - ⚠️ NEEDS UPDATES TO MATCH SPEC:
-```typescript
-- fullName: string (min 2 chars) ✅
-- email: email validation ✅
-- whatsapp: string (min 10 chars) ✅
-- linkedin: URL (optional) ✅
-- profession: string (min 2 chars) ✅
-- aiKnowledge: enum ["beginner", "intermediate", "advanced"] ❌ WRONG VALUES
-- toolsUsed: array of strings (min 1) ✅ (but wrong options)
-- computerType: enum ["windows", "mac", "linux", "other"] ❌ WRONG VALUES
-- specs: string (optional) ✅
-- primaryGoal: enum ["voice-agents", "chatbots", "content-workflows", "all"] ❌ WRONG VALUES
-- specificOutcome: string (min 10 chars) ✅
-- consent: boolean (must be true) ✅
-```
-
-**REQUIRED VALUES** (from spec):
-- `aiKnowledge`: `["Complete Beginner", "I've used ChatGPT", "I use AI tools daily", "Advanced/Developer"]`
-- `computerType`: `["Mac", "Windows", "Linux", "Tablet/Mobile"]`
-- `primaryGoal`: `["Upskilling for Job", "Starting an Agency/Business", "Personal Project", "Just Curious"]`
-- `toolsUsed`: Options should be `["ChatGPT/Claude", "Midjourney/DALL-E", "n8n/Automation", "Stable Diffusion", "None"]`
-- `consent`: Message should say "community code of conduct" not "terms and conditions"
+- ✅ Schema values now match spec (aiKnowledge, computerType, primaryGoal, toolsUsed). Consent message references community code of conduct.
 
 #### API Service (`src/lib/api/waitlist.ts`)
 - Function: `submitWaitlistForm(data: WaitlistFormData)`
-- POSTs to `import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL`
+- POSTs to `/api/submit-waitlist` (serverless proxy -> `N8N_WEBHOOK_URL`)
 - Returns `WaitlistResponse` with success/error states
 - Handles errors and throws appropriate messages
 
@@ -93,11 +72,8 @@
 
 ### ⚠️ Issues & Required Updates
 
-1. **Schema Mismatch**: `waitlist-schema.ts` has wrong enum values - needs update to match spec
-2. **Form Labels**: `Waitlist.tsx` has wrong labels/options - needs update
-3. **Consent Text**: Says "terms and conditions" should say "community code of conduct"
-4. **Environment Variables**: `.env` file doesn't exist yet - needs to be created
-5. **Google Sheet**: Not set up yet - Database Agent needs to create and deploy
+1. **Environment Variables**: `.env` needs the live webhook URL. Serverless proxy uses `N8N_WEBHOOK_URL`; optional `VITE_GOOGLE_SHEETS_WEBHOOK_URL` if submitting directly from client. `.env.example` added with placeholders.
+2. **Google Sheet**: Not set up yet - Database Agent needs to create and deploy
 
 ### 📁 File Structure
 
@@ -122,7 +98,7 @@ src/
 ├── lib/
 │   ├── api/
 │   │   └── waitlist.ts ✅
-│   ├── waitlist-schema.ts ⚠️ (needs enum value updates)
+│   ├── waitlist-schema.ts ✅ (values match spec)
 │   └── utils.ts ✅
 ├── hooks/
 │   └── use-toast.ts ✅
@@ -132,8 +108,8 @@ docs/
 ├── google-apps-script.js ✅ (may need updates)
 └── SETUP.md ✅
 
-.env ❌ (doesn't exist - needs creation)
-.env.example ❌ (doesn't exist - needs creation)
+.env ❌ (create locally with webhook URL)
+.env.example ✅ (added)
 ```
 
 ---
@@ -141,14 +117,9 @@ docs/
 ## Agent Responsibilities
 
 ### Frontend Agent
-**Tasks**:
-1. Update `waitlist-schema.ts` with correct enum values matching spec
-2. Update `Waitlist.tsx` form labels and options to match spec
-3. Update consent checkbox text to "community code of conduct"
-4. Ensure form validation works correctly
-5. Test form submission flow
+**Status (2025-12-05)**: Schema enums, form labels/options, and consent text updated to spec.
 
-**Files to Modify**:
+**Files Modified**:
 - `src/lib/waitlist-schema.ts`
 - `src/pages/Waitlist.tsx`
 
@@ -160,20 +131,18 @@ docs/
 - [ ] Error toast shows on failure
 
 ### Backend Agent
-**Tasks**:
-1. Create `.env` file structure
-2. Create `.env.example` template
-3. Update Google Apps Script if needed to match final schema
-4. Ensure webhook handles all form fields correctly
+**Status (2025-12-05)**: `.env.example` added with `N8N_WEBHOOK_URL` placeholder used by `/api/submit-waitlist` proxy. Create local `.env` with the live URL. Google Apps Script unchanged.
 
 **Files to Create/Modify**:
-- `.env` (create)
-- `.env.example` (create)
+- `.env` (local only; add `N8N_WEBHOOK_URL`)
+- `.env.example` (added)
 - `docs/google-apps-script.js` (update if needed)
 
-**Environment Variable**:
+**Environment Variables**:
 ```
-VITE_GOOGLE_SHEETS_WEBHOOK_URL=your_webhook_url_here
+N8N_WEBHOOK_URL=your_n8n_webhook_url_here
+# Optional if using direct client submit:
+# VITE_GOOGLE_SHEETS_WEBHOOK_URL=your_google_apps_script_webhook_here
 ```
 
 **Testing Checklist**:
@@ -346,9 +315,8 @@ Timestamp | Full Name | Email | WhatsApp | LinkedIn | Profession | AI Knowledge 
 
 ## Next Steps
 
-1. Frontend Agent: Update schema and form to match spec exactly
-2. Backend Agent: Create environment variable files
-3. Database Agent: Set up Google Sheet and deploy script
-4. All Agents: Test end-to-end flow
-5. Final verification: Ensure all form fields match spec requirements
+1. Backend Agent: Add real webhook URL to `.env`; confirm proxy works
+2. Database Agent: Set up Google Sheet and deploy script
+3. All Agents: Test end-to-end flow
+4. Final verification: Ensure all form fields match spec requirements
 

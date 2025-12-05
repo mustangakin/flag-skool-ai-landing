@@ -35,18 +35,29 @@ import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 
+const AI_KNOWLEDGE_OPTIONS = [
+  "Complete Beginner",
+  "I've used ChatGPT",
+  "I use AI tools daily",
+  "Advanced/Developer",
+] as const;
+
 const AI_TOOLS_OPTIONS = [
-  { value: "chatgpt", label: "ChatGPT" },
-  { value: "claude", label: "Claude" },
-  { value: "gemini", label: "Gemini" },
-  { value: "dalle", label: "DALL-E" },
-  { value: "runway", label: "Runway" },
-  { value: "pika", label: "Pika" },
-  { value: "n8n", label: "n8n" },
-  { value: "vapi", label: "Vapi" },
-  { value: "cursor", label: "Cursor" },
-  { value: "none", label: "None" },
-];
+  { value: "ChatGPT/Claude", label: "ChatGPT/Claude" },
+  { value: "Midjourney/DALL-E", label: "Midjourney/DALL-E" },
+  { value: "n8n/Automation", label: "n8n/Automation" },
+  { value: "Stable Diffusion", label: "Stable Diffusion" },
+  { value: "None", label: "None" },
+] as const;
+
+const COMPUTER_TYPE_OPTIONS = ["Mac", "Windows", "Linux", "Tablet/Mobile"] as const;
+
+const PRIMARY_GOAL_OPTIONS = [
+  "Upskilling for Job",
+  "Starting an Agency/Business",
+  "Personal Project",
+  "Just Curious",
+] as const;
 
 const WaitlistPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -216,9 +227,11 @@ const WaitlistPage = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="beginner">Beginner - Just getting started</SelectItem>
-                            <SelectItem value="intermediate">Intermediate - Some experience</SelectItem>
-                            <SelectItem value="advanced">Advanced - Extensive experience</SelectItem>
+                            {AI_KNOWLEDGE_OPTIONS.map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {option}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -288,7 +301,7 @@ const WaitlistPage = () => {
                     name="computerType"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>What type of computer do you use? *</FormLabel>
+                        <FormLabel>What computer will you use? *</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -296,10 +309,11 @@ const WaitlistPage = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="windows">Windows</SelectItem>
-                            <SelectItem value="mac">Mac</SelectItem>
-                            <SelectItem value="linux">Linux</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            {COMPUTER_TYPE_OPTIONS.map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {option}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -339,45 +353,23 @@ const WaitlistPage = () => {
                     name="primaryGoal"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>What's your primary goal? *</FormLabel>
+                        <FormLabel>Primary Goal *</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                             className="flex flex-col space-y-1"
                           >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="voice-agents" />
-                              </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
-                                Build Voice Agents
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="chatbots" />
-                              </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
-                                Create Custom Chatbots
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="content-workflows" />
-                              </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
-                                Build AI Content Workflows
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="all" />
-                              </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
-                                All of the above
-                              </FormLabel>
-                            </FormItem>
+                            {PRIMARY_GOAL_OPTIONS.map((option) => (
+                              <FormItem key={option} className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value={option} />
+                                </FormControl>
+                                <FormLabel className="font-normal cursor-pointer">
+                                  {option}
+                                </FormLabel>
+                              </FormItem>
+                            ))}
                           </RadioGroup>
                         </FormControl>
                         <FormMessage />
@@ -420,7 +412,7 @@ const WaitlistPage = () => {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel className="cursor-pointer">
-                            I agree to the terms and conditions *
+                            I agree to the community code of conduct *
                           </FormLabel>
                           <FormDescription>
                             By submitting this form, you agree to receive communications from Flag Skool.

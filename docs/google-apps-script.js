@@ -200,41 +200,22 @@ function ensureHeaders(sheet) {
     "Consent"
   ];
   
-  // Check if sheet is empty - create headers if so
+  // Check if headers already exist
   if (sheet.getLastRow() === 0) {
+    // Sheet is empty, add headers
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    formatHeaderRow(sheet, headers.length);
-    console.log("Headers created (empty sheet)");
-    return;
+    
+    // Format header row
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight("bold");
+    headerRange.setBackground("#4285f4");
+    headerRange.setFontColor("#ffffff");
+    
+    // Freeze header row
+    sheet.setFrozenRows(1);
+    
+    console.log("Headers created");
   }
-  
-  // Defensive check: Verify headers exist and match expected format
-  // This handles cases where headers were deleted or corrupted after data exists
-  const firstRow = sheet.getRange(1, 1, 1, headers.length).getValues()[0];
-  const headersExist = firstRow.length === headers.length && 
-                       firstRow.every((cell, index) => cell === headers[index]);
-  
-  if (!headersExist) {
-    // Headers are missing or don't match - recreate them
-    // Insert a new row at the top to preserve existing data
-    sheet.insertRowBefore(1);
-    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    formatHeaderRow(sheet, headers.length);
-    console.log("Headers recreated (headers were missing or corrupted)");
-  }
-}
-
-/**
- * Formats the header row with styling
- * @param {Sheet} sheet - The Google Sheet object
- * @param {number} headerCount - Number of header columns
- */
-function formatHeaderRow(sheet, headerCount) {
-  const headerRange = sheet.getRange(1, 1, 1, headerCount);
-  headerRange.setFontWeight("bold");
-  headerRange.setBackground("#4285f4");
-  headerRange.setFontColor("#ffffff");
-  sheet.setFrozenRows(1);
 }
 
 /**

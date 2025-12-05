@@ -46,22 +46,31 @@ const SHEET_NAME = "Sheet1";
  */
 function doPost(e) {
   try {
+    // Log the incoming request for debugging
+    console.log("Received POST request");
+    
     // Check if postData exists
     if (!e || !e.postData || !e.postData.contents) {
+      console.error("No data received");
       return createErrorResponse(400, "No data received in request");
     }
+    
+    console.log("Raw data:", e.postData.contents);
     
     // Parse the JSON payload
     let data;
     try {
       data = JSON.parse(e.postData.contents);
+      console.log("Parsed data:", JSON.stringify(data));
     } catch (parseError) {
+      console.error("Parse error:", parseError);
       return createErrorResponse(400, "Invalid JSON format: " + parseError.toString());
     }
     
     // Validate required fields
     const validationError = validateData(data);
     if (validationError) {
+      console.error("Validation error:", validationError);
       return createErrorResponse(400, validationError);
     }
     
@@ -76,12 +85,16 @@ function doPost(e) {
     
     // Append the row to the sheet
     sheet.appendRow(rowData);
+    console.log("Row appended successfully");
     
     // Return success response
-    return createSuccessResponse("Form submitted successfully");
+    return createSuccessResponse("Form submitted successfully", {
+      timestamp: new Date().toISOString(),
+      rowNumber: sheet.getLastRow()
+    });
     
   } catch (error) {
-    // Log error for debugging (visible in Apps Script execution log)
+    // Log error for debugging
     console.error("Error processing request:", error);
     
     // Return error response
@@ -90,15 +103,19 @@ function doPost(e) {
 }
 
 /**
- * Handle GET requests (for testing)
- * Note: CORS is handled automatically by Google Apps Script when deployed correctly
- * Make sure deployment settings are:
- * - Execute as: "Me"
- * - Who has access: "Anyone" (NOT "Anyone with Google account")
+ * Handle GET requests (for testing and verification)
  */
 function doGet(e) {
+  const response = {
+    success: true,
+    message: "AI Masterclass Form Webhook is active",
+    timestamp: new Date().toISOString(),
+    sheetName: SHEET_NAME,
+    status: "ready"
+  };
+  
   return ContentService
-    .createTextOutput(JSON.stringify({ success: true, message: "Webhook is active" }))
+    .createTextOutput(JSON.stringify(response, null, 2))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -156,6 +173,7 @@ function getOrCreateSheet() {
   
   if (!sheet) {
     sheet = spreadsheet.insertSheet(SHEET_NAME);
+    console.log("Created new sheet:", SHEET_NAME);
   }
   
   return sheet;
@@ -182,23 +200,41 @@ function ensureHeaders(sheet) {
     "Consent"
   ];
   
-  // Check if headers already exist
+  // Check if sheet is empty - create headers if so
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    formatHeaderRow(sheet, headers.length);
+    console.log("Headers created (empty sheet)");
+    return;
+  }
+  
+  // Defensive check: Verify headers exist and match expected format
+  // This handles cases where headers were deleted or corrupted after data exists
   const firstRow = sheet.getRange(1, 1, 1, headers.length).getValues()[0];
-  const headersExist = firstRow.every((cell, index) => cell === headers[index]);
+  const headersExist = firstRow.length === headers.length && 
+                       firstRow.every((cell, index) => cell === headers[index]);
   
   if (!headersExist) {
-    // Clear first row and set headers
+    // Headers are missing or don't match - recreate them
+    // Insert a new row at the top to preserve existing data
+    sheet.insertRowBefore(1);
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    
-    // Format header row (bold, background color)
-    const headerRange = sheet.getRange(1, 1, 1, headers.length);
-    headerRange.setFontWeight("bold");
-    headerRange.setBackground("#4285f4");
-    headerRange.setFontColor("#ffffff");
-    
-    // Freeze header row
-    sheet.setFrozenRows(1);
+    formatHeaderRow(sheet, headers.length);
+    console.log("Headers recreated (headers were missing or corrupted)");
   }
+}
+
+/**
+ * Formats the header row with styling
+ * @param {Sheet} sheet - The Google Sheet object
+ * @param {number} headerCount - Number of header columns
+ */
+function formatHeaderRow(sheet, headerCount) {
+  const headerRange = sheet.getRange(1, 1, 1, headerCount);
+  headerRange.setFontWeight("bold");
+  headerRange.setBackground("#4285f4");
+  headerRange.setFontColor("#ffffff");
+  sheet.setFrozenRows(1);
 }
 
 /**
@@ -215,7 +251,7 @@ function prepareRowData(data) {
     data.linkedin || "",
     data.profession || "",
     data.aiKnowledge || "",
-    data.toolsUsed.join(", "), // Convert array to comma-separated string
+    Array.isArray(data.toolsUsed) ? data.toolsUsed.join(", ") : data.toolsUsed,
     data.computerType || "",
     data.specs || "",
     data.primaryGoal || "",
@@ -225,35 +261,23 @@ function prepareRowData(data) {
 }
 
 /**
- * Creates a response with CORS support
- * Note: Google Apps Script web apps handle CORS automatically when deployed with "Anyone" access
- * @param {string} content - The response content
- * @returns {Object} Response object
- */
-function createCORSResponse(content) {
-  return ContentService
-    .createTextOutput(content || "")
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-/**
  * Creates a success JSON response
- * Google Apps Script automatically handles CORS when deployed with "Anyone" access
  * @param {string} message - Success message
+ * @param {Object} data - Additional data to include
  * @returns {Object} JSON response object
  */
-function createSuccessResponse(message) {
+function createSuccessResponse(message, data = {}) {
   return ContentService
     .createTextOutput(JSON.stringify({
       success: true,
-      message: message
+      message: message,
+      ...data
     }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
 /**
  * Creates an error JSON response
- * Google Apps Script automatically handles CORS when deployed with "Anyone" access
  * @param {number} statusCode - HTTP status code
  * @param {string} errorMessage - Error message
  * @returns {Object} JSON response object
@@ -270,7 +294,7 @@ function createErrorResponse(statusCode, errorMessage) {
 
 /**
  * Test function for development/debugging
- * Run this function manually in Apps Script editor to test the script
+ * Run this in Apps Script editor to verify everything works
  */
 function testDoPost() {
   const testData = {
@@ -296,5 +320,9 @@ function testDoPost() {
   
   const result = doPost(mockEvent);
   Logger.log(result.getContent());
+  
+  // Also check the sheet
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  Logger.log("Last row number:", sheet.getLastRow());
 }
 

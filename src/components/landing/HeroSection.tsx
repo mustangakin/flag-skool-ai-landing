@@ -14,6 +14,28 @@ const HeroSection = () => {
 
   return (
     <section className="pt-32 pb-20 px-6 relative overflow-hidden min-h-[90vh] flex items-center">
+      {/* Background Image */}
+      <div className="absolute inset-0 -z-20">
+        <img 
+          src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+          alt="Hero Background"
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback to gradient if image fails to load
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const parent = target.parentElement;
+            if (parent) {
+              parent.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+          }}
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Gradient overlay for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
+      </div>
+
       {/* Particles Background */}
       <ParticlesBackground />
       

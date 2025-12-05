@@ -71,3 +71,4 @@ const ScrollReveal = ({
 
 export default ScrollReveal;
 
+

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar = () => {
   const location = useLocation();
@@ -59,29 +60,32 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Right-side button, using your primary (red) color */}
-          {!isWaitlistPage && (
-            <Link to="/waitlist">
-              <Button
-                size="sm"
-                className="rounded-full px-6"
-              >
-                Join Waitlist
-              </Button>
-            </Link>
-          )}
+          {/* Right-side: Theme toggle and button */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            {!isWaitlistPage && (
+              <Link to="/waitlist">
+                <Button
+                  size="sm"
+                  className="rounded-full px-6"
+                >
+                  Join Waitlist
+                </Button>
+              </Link>
+            )}
 
-          {isWaitlistPage && (
-            <Link to="/">
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-full px-6"
-              >
-                Back to Home
-              </Button>
-            </Link>
-          )}
+            {isWaitlistPage && (
+              <Link to="/">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-full px-6"
+                >
+                  Back to Home
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>

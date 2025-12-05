@@ -33,10 +33,11 @@ const BenefitsSection = () => {
           </div>
         </ScrollReveal>
         
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 items-stretch">
           {benefits.map((benefit, index) => (
             <ScrollReveal key={benefit.title} direction="up" delay={index * 150}>
               <Tilt
+                className="h-full"
                 tiltMaxAngleX={5}
                 tiltMaxAngleY={5}
                 scale={1.05}

@@ -1,10 +1,13 @@
 import WaitlistForm from "./WaitlistForm";
-import { Calendar, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import ParticlesBackground from "@/components/ui/particles-background";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import { useSpring, animated } from "@react-spring/web";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const HeroSection = () => {
   const { ref: countRef, inView: countInView } = useInView({
@@ -12,35 +15,68 @@ const HeroSection = () => {
     triggerOnce: true,
   });
 
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Determine which image to use based on theme
+  const getBackgroundImage = () => {
+    if (!mounted) {
+      return "/hero-bg-light.jpg"; // Default fallback
+    }
+
+    // Use resolvedTheme to handle "system" theme properly
+    const currentTheme = resolvedTheme || theme || "light";
+    
+    if (currentTheme === "dark") {
+      return "/hero-bg-dark.jpg";
+    } else {
+      return "/hero-bg-light.jpg";
+    }
+  };
+
   return (
     <section className="pt-32 pb-20 px-6 relative overflow-hidden min-h-[90vh] flex items-center">
-      {/* Background Image */}
-      <div className="absolute inset-0 -z-20">
-        <img 
-          src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-          alt="Hero Background"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Fallback to gradient if image fails to load
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-            const parent = target.parentElement;
-            if (parent) {
-              parent.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-            }
-          }}
-        />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
-        {/* Gradient overlay for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
+      {/* Background Image - Theme Based */}
+      <div 
+        className="absolute inset-0"
+        style={{ 
+          zIndex: 0,
+          backgroundImage: `url(${getBackgroundImage()})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Subtle overlay for text readability - lighter to show image better */}
+        <div 
+          className={`absolute inset-0 ${
+            (resolvedTheme || theme) === "dark" 
+              ? "bg-black/30" 
+              : "bg-black/20"
+          }`}
+        ></div>
+        {/* Light gradient overlay for subtle text contrast */}
+        <div 
+          className={`absolute inset-0 bg-gradient-to-b ${
+            (resolvedTheme || theme) === "dark"
+              ? "from-black/20 via-transparent to-black/40"
+              : "from-black/10 via-transparent to-black/30"
+          }`}
+        ></div>
       </div>
 
-      {/* Particles Background */}
-      <ParticlesBackground />
+      {/* Particles Background - above image but below content */}
+      <div className="absolute inset-0" style={{ zIndex: 1 }}>
+        <ParticlesBackground />
+      </div>
       
       {/* Background decorative elements */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0" style={{ zIndex: 1 }}>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         {/* Subtle grid pattern */}
@@ -49,23 +85,20 @@ const HeroSection = () => {
 
       <div className="container mx-auto max-w-4xl text-center relative z-10">
         <ScrollReveal direction="down" delay={0}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-8 border border-border/50 shadow-sm backdrop-blur-sm">
-            <Calendar className="w-4 h-4" />
-            Cohort begins January 2025
-          </div>
+          <CountdownTimer />
         </ScrollReveal>
         
         <ScrollReveal direction="up" delay={100}>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             Master AI Automation & Engineering in{" "}
-            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent animate-gradient">
-              2025
+            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent animate-gradient drop-shadow-[0_2px_4px_rgba(239,68,68,0.5)]">
+              2026
             </span>
           </h1>
         </ScrollReveal>
         
         <ScrollReveal direction="up" delay={200}>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg sm:text-xl text-foreground/95 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)] font-medium">
             The complete bootcamp for building Voice Agents, Custom Chatbots, and AI Content Workflows. 
             Stop watching AI happen—start building it.
           </p>
@@ -79,19 +112,18 @@ const HeroSection = () => {
 
         {/* Social proof indicator with animated counter */}
         <ScrollReveal direction="fade" delay={400}>
-          <div ref={countRef} className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <div
+            ref={countRef}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-md border border-primary/40 shadow-lg text-sm text-foreground"
+          >
             <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span>
+            <span className="font-semibold text-foreground">
               Join{" "}
-              {countInView && (
-                <CountUp
-                  end={2000}
-                  duration={2}
-                  separator=","
-                  className="font-semibold text-primary"
-                />
+              {countInView ? (
+                <CountUp end={2000} duration={2} separator="," />
+              ) : (
+                "2,000"
               )}
-              {!countInView && "2,000"}
               + professionals already ahead
             </span>
           </div>

@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
   const isWaitlistPage = location.pathname === "/waitlist";
   const [logoError, setLogoError] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -52,11 +54,11 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Right-side: Theme toggle and button */}
+          {/* Right-side: Theme toggle, button, and hamburger */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
             {!isWaitlistPage && (
-              <Link to="/waitlist">
+              <Link to="/waitlist" className="hidden sm:block">
                 <Button
                   size="sm"
                   className="rounded-full px-6"
@@ -67,7 +69,7 @@ const Navbar = () => {
             )}
 
             {isWaitlistPage && (
-              <Link to="/">
+              <Link to="/" className="hidden sm:block">
                 <Button
                   size="sm"
                   variant="outline"
@@ -77,8 +79,67 @@ const Navbar = () => {
                 </Button>
               </Link>
             )}
+
+            {/* Hamburger menu button - visible on mobile */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5 text-foreground" />
+              ) : (
+                <Menu className="w-5 h-5 text-foreground" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden mx-auto max-w-5xl mt-2">
+            <div className="bg-card/95 border border-border rounded-2xl shadow-lg p-4 space-y-3">
+              <Link
+                to="/curriculum"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-xl text-foreground hover:bg-muted transition-colors font-medium"
+              >
+                Curriculum
+              </Link>
+              <Link
+                to="/benefits"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-xl text-foreground hover:bg-muted transition-colors font-medium"
+              >
+                Benefits
+              </Link>
+              <Link
+                to="/pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-xl text-foreground hover:bg-muted transition-colors font-medium"
+              >
+                Pricing
+              </Link>
+              
+              {/* Join Waitlist button in mobile menu */}
+              {!isWaitlistPage && (
+                <Link to="/waitlist" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full rounded-xl mt-2">
+                    Join Waitlist
+                  </Button>
+                </Link>
+              )}
+              
+              {isWaitlistPage && (
+                <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full rounded-xl mt-2">
+                    Back to Home
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

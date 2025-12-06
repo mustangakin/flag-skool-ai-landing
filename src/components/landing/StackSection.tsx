@@ -1,38 +1,29 @@
 import React from "react";
 import ScrollReveal from "@/components/ui/scroll-reveal";
-import * as Icons from "@lobehub/icons";
+import { useTheme } from "next-themes";
 
-// Map tool names to custom logo paths (if you have SVG files)
-const getCustomLogo = (toolName: string) => {
-  const customLogos: Record<string, string> = {
+// Logo configuration: local SVG/PNG files
+const getLogoUrl = (toolName: string, isDark: boolean): string | null => {
+  // Special case for OpenRouter with light/dark variants
+  if (toolName === "OpenRouter") {
+    return isDark ? "/logos/openrouter-logo-dark.png" : "/logos/openrouter-logo-light.png";
+  }
+  
+  const logoMap: Record<string, string> = {
+    // Local logos
+    "Google": "/logos/google-color.svg",
+    "n8n": "/logos/n8n-logo.png",
     "Vapi": "/logos/vapi-logo.svg",
-    // Add more custom logos here as needed
+    "Cursor": "/logos/cursor-logo.svg",
+    "Gemini": "/logos/gemini-color.png",
+    "ChatGPT": "/logos/openai.svg",
+    "ElevenLabs": "/logos/elevenlabs.svg",
+    "Google Cloud": "/logos/googlecloud-color.svg",
+    "Lovable": "/logos/lovable-color.svg",
+    "Tavily": "/logos/tavily-logo.svg",
+    "Replit": "/logos/replit-logo.svg",
   };
-  return customLogos[toolName] || null;
-};
-
-// Map tool names to their icon component names in @lobehub/icons
-const getIconComponent = (toolName: string) => {
-  const iconMap: Record<string, string> = {
-    "n8n": "N8n",
-    "Vapi": "Vapi", // This will be skipped if custom logo exists
-    "Cursor": "Cursor",
-    "Gemini": "Gemini",
-    "ElevenLabs": "ElevenLabs",
-    "OpenRouter": "OpenRouter",
-    "Google": "Google",
-    "Google Cloud": "GoogleCloud",
-    "Lovable": "Lovable",
-    "Tavily": "Tavily",
-  };
-  
-  const iconName = iconMap[toolName];
-  if (!iconName) return null;
-  
-  // Try to get the icon component dynamically
-  // Use the default icon component (monochrome/color icon, not .Text variant)
-  const IconComponent = (Icons as any)[iconName];
-  return IconComponent || null;
+  return logoMap[toolName] || null;
 };
 
 const tools = [
@@ -51,6 +42,10 @@ const tools = [
   { 
     name: "Gemini", 
     description: "LLM Platform"
+  },
+  { 
+    name: "ChatGPT", 
+    description: "AI Assistant"
   },
   { 
     name: "ElevenLabs", 
@@ -76,30 +71,32 @@ const tools = [
     name: "Tavily", 
     description: "AI Search"
   },
+  { 
+    name: "Replit", 
+    description: "Cloud IDE"
+  },
 ];
 
 interface ToolItemProps {
   tool: { name: string; description: string };
   index: number;
+  isDark: boolean;
 }
 
-const ToolItem = ({ tool, index }: ToolItemProps) => {
+const ToolItem = ({ tool, index, isDark }: ToolItemProps) => {
   const [logoError, setLogoError] = React.useState(false);
-  const customLogo = getCustomLogo(tool.name);
-  const IconComponent = getIconComponent(tool.name);
+  const logoUrl = getLogoUrl(tool.name, isDark);
   
   return (
     <div className="flex flex-col items-center gap-2 text-center p-4 rounded-xl hover:bg-card transition-all duration-300 group cursor-pointer flex-shrink-0 w-[140px] md:w-[160px]">
       <div className="w-12 h-12 rounded-xl bg-background border border-border flex items-center justify-center shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-md group-hover:scale-110 overflow-hidden">
-        {customLogo && !logoError ? (
+        {logoUrl && !logoError ? (
           <img 
-            src={customLogo} 
+            src={logoUrl} 
             alt={`${tool.name} logo`}
-            className="w-full h-full object-contain p-1"
+            className="w-8 h-8 object-contain"
             onError={() => setLogoError(true)}
           />
-        ) : IconComponent ? (
-          <IconComponent size={32} />
         ) : (
           <span className="font-semibold text-primary text-xs transition-colors group-hover:text-primary/80">
             {tool.name.slice(0, 2).toUpperCase()}
@@ -113,6 +110,16 @@ const ToolItem = ({ tool, index }: ToolItemProps) => {
 };
 
 const StackSection = () => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  
+  // Avoid hydration mismatch
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  const isDark = mounted && resolvedTheme === "dark";
+  
   // Duplicate tools for seamless infinite scroll
   const duplicatedTools = [...tools, ...tools, ...tools];
   
@@ -134,7 +141,7 @@ const StackSection = () => {
           {/* Scrolling wrapper */}
           <div className="flex animate-scroll">
             {duplicatedTools.map((tool, index) => (
-              <ToolItem key={`${tool.name}-${index}`} tool={tool} index={index} />
+              <ToolItem key={`${tool.name}-${index}`} tool={tool} index={index} isDark={isDark} />
             ))}
           </div>
         </div>

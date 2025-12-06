@@ -1,6 +1,5 @@
 import WaitlistForm from "./WaitlistForm";
 import { Sparkles } from "lucide-react";
-import ParticlesBackground from "@/components/ui/particles-background";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import { useSpring, animated } from "@react-spring/web";
 import CountUp from "react-countup";
@@ -70,11 +69,6 @@ const HeroSection = () => {
         ></div>
       </div>
 
-      {/* Particles Background - above image but below content */}
-      <div className="absolute inset-0" style={{ zIndex: 1 }}>
-        <ParticlesBackground />
-      </div>
-      
       {/* Background decorative elements */}
       <div className="absolute inset-0" style={{ zIndex: 1 }}>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>

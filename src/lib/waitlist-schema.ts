@@ -61,4 +61,3 @@ export const waitlistSchema = z.object({
 });
 
 export type WaitlistFormData = z.infer<typeof waitlistSchema>;
-

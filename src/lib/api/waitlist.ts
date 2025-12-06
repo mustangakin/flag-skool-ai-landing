@@ -58,5 +58,3 @@ export async function submitWaitlistForm(
       : new Error('Failed to submit form. Please try again.');
   }
 }
-
-

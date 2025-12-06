@@ -64,6 +64,3 @@ const CookieBanner = () => {
 };
 
 export default CookieBanner;
-
-
-

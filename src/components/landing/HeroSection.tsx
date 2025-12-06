@@ -1,7 +1,6 @@
 import WaitlistForm from "./WaitlistForm";
 import { Sparkles } from "lucide-react";
 import ScrollReveal from "@/components/ui/scroll-reveal";
-import { useSpring, animated } from "@react-spring/web";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { useTheme } from "next-themes";

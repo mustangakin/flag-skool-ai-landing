@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Waitlist from "./pages/Waitlist";
+import Curriculum from "./pages/Curriculum";
+import Benefits from "./pages/Benefits";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import CookieBanner from "./components/CookieBanner";
 
@@ -45,6 +48,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/waitlist" element={<Waitlist />} />
+            <Route path="/curriculum" element={<Curriculum />} />
+            <Route path="/benefits" element={<Benefits />} />
+            <Route path="/pricing" element={<Pricing />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

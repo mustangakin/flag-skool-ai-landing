@@ -8,18 +8,6 @@ const Navbar = () => {
   const isWaitlistPage = location.pathname === "/waitlist";
   const [logoError, setLogoError] = useState(false);
 
-  const scrollToSection = (id: string) => {
-    if (location.pathname !== "/") {
-      // If not on home page, navigate first
-      window.location.href = `/#${id}`;
-    } else {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-  };
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4 py-3">
@@ -42,23 +30,27 @@ const Navbar = () => {
             <span className="font-semibold text-lg text-foreground">Flag Skool</span>
           </Link>
 
-          {/* Center nav links (only the ones you want) */}
-          {!isWaitlistPage && (
-            <div className="hidden md:flex items-center gap-6 text-sm">
-              <button
-                onClick={() => scrollToSection("curriculum")}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Curriculum
-              </button>
-              <button
-                onClick={() => scrollToSection("benefits")}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Benefits
-              </button>
-            </div>
-          )}
+          {/* Center nav links */}
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            <Link
+              to="/curriculum"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Curriculum
+            </Link>
+            <Link
+              to="/benefits"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Benefits
+            </Link>
+            <Link
+              to="/pricing"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Pricing
+            </Link>
+          </div>
 
           {/* Right-side: Theme toggle and button */}
           <div className="flex items-center gap-3">

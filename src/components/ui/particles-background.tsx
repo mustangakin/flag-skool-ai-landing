@@ -1,20 +1,24 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import type { Engine } from "@tsparticles/engine";
-import { useEffect, useState } from "react";
+import type { Container, Engine } from "@tsparticles/engine";
 
 const ParticlesBackground = () => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    loadSlim("@tsparticles/slim").then(() => {
+    const initParticles = async () => {
+      const { initParticlesEngine } = await import("@tsparticles/react");
+      await initParticlesEngine(async (engine: Engine) => {
+        await loadSlim(engine);
+      });
       setInit(true);
-    });
+    };
+    initParticles();
   }, []);
 
-  const particlesLoaded = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
+  const particlesLoaded = useCallback(async (container?: Container) => {
+    console.log("Particles container loaded", container);
   }, []);
 
   if (!init) return null;
@@ -41,7 +45,6 @@ const ParticlesBackground = () => {
               enable: true,
               mode: "repulse",
             },
-            resize: true,
           },
           modes: {
             push: {
@@ -55,7 +58,7 @@ const ParticlesBackground = () => {
         },
         particles: {
           color: {
-            value: "#ef4444", // Red color matching primary
+            value: "#ef4444",
           },
           links: {
             color: "#ef4444",
@@ -77,7 +80,6 @@ const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              area: 800,
             },
             value: 50,
           },
@@ -98,4 +100,3 @@ const ParticlesBackground = () => {
 };
 
 export default ParticlesBackground;
-

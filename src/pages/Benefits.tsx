@@ -15,8 +15,8 @@ const benefits = [
   {
     icon: Users,
     title: "Community-Driven Learning",
-    description: "Join a cohort of ambitious builders. Collaborate, get feedback, and grow together. Our community Discord is active 24/7 with mentors and peers ready to help.",
-    highlights: ["Active Discord community", "Peer collaboration", "Mentor support"],
+    description: "Join a cohort of ambitious builders. Collaborate, get feedback, and grow together. Our community Telegram is active 24/7 with mentors and peers ready to help.",
+    highlights: ["Active Telegram community", "Peer collaboration", "Mentor support"],
   },
   {
     icon: Rocket,

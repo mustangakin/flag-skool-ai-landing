@@ -14,8 +14,9 @@ const Index = () => {
       <main>
         <HeroSection />
         <VideoSection 
-          videoUrl="https://videos.pexels.com/video-files/30333849/13003128_2560_1440_25fps.mp4"
+          videoUrl="https://youtu.be/cPgeu9zO_DM?si=GYkS3M1mzhH1kcMu"
           title="See Flag Skool in Action"
+          description="create cinematic videos with Nano Banana pro and veo 3"
         />
         <StackSection />
         <CurriculumGrid />

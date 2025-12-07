@@ -10,21 +10,27 @@ const Footer = () => {
         
         <div className="flex items-center gap-4">
           <a 
-            href="#" 
+            href="https://x.com/mustang_akin" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Twitter"
           >
             <Twitter className="w-5 h-5" />
           </a>
           <a 
-            href="#" 
+            href="https://linkedin.com/in/akintunde-solarin-51b21132b" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="LinkedIn"
           >
             <Linkedin className="w-5 h-5" />
           </a>
           <a 
-            href="#" 
+            href="https://youtube.com/@solarinakintunde1?si=aaZ1f_078fof8iMI" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="YouTube"
           >

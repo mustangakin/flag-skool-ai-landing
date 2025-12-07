@@ -9,14 +9,14 @@ import { Link } from "react-router-dom";
 const plans = [
   {
     name: "Starter",
-    price: "$497",
-    originalPrice: "$997",
+    price: "₦50,000",
+    originalPrice: "₦70,000",
     description: "Perfect for individuals getting started with AI",
     icon: Zap,
     features: [
       "Full 8-week curriculum access",
       "20+ live sessions",
-      "Community Discord access",
+      "Community Telegram access",
       "12 hands-on projects",
       "Completion certificate",
       "3 months of updates",
@@ -31,14 +31,14 @@ const plans = [
   },
   {
     name: "Professional",
-    price: "$997",
-    originalPrice: "$1,997",
+    price: "₦100,000",
+    originalPrice: "₦135,000",
     description: "Best value for serious learners",
     icon: Star,
     features: [
       "Everything in Starter",
       "4x 1-on-1 mentorship calls",
-      "Priority Discord support",
+      "Priority Telegram support",
       "Resume & portfolio review",
       "Job board access",
       "Interview preparation",
@@ -86,12 +86,8 @@ const faqs = [
     answer: "All live sessions are recorded. You can catch up at your own pace, and our community is always available to help.",
   },
   {
-    question: "Is there a refund policy?",
-    answer: "Yes, we offer a 14-day money-back guarantee. If the course isn't right for you, we'll refund your full payment.",
-  },
-  {
     question: "Can I pay in installments?",
-    answer: "Yes, we offer 3-month payment plans for all tiers. Contact us for details.",
+    answer: "Yes, we offer a two-time payment system for Professional and Enterprise plans. Contact us for details.",
   },
 ];
 
@@ -101,17 +97,18 @@ const Pricing = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="container mx-auto max-w-5xl text-center">
           <ScrollReveal direction="down">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              <Zap className="w-4 h-4" />
-              Early Bird Pricing - Save up to 50%
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+              <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="whitespace-nowrap">Early Bird Pricing</span>
+              <span className="hidden sm:inline"> - Save up to 50%</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4 px-2">
               Invest in Your AI Future
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
               Choose the plan that fits your goals. All plans include our core curriculum 
               and access to our thriving community.
             </p>
@@ -120,9 +117,9 @@ const Pricing = () => {
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-16 px-6">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-6 items-stretch">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
             {plans.map((plan, index) => (
               <ScrollReveal key={plan.name} direction="up" delay={index * 100}>
                 <Tilt
@@ -132,58 +129,71 @@ const Pricing = () => {
                   scale={1.02}
                   transitionSpeed={2500}
                 >
-                  <div className={`h-full p-6 rounded-2xl border transition-all duration-300 relative ${
+                  <div className={`h-full p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl border transition-all duration-300 relative flex flex-col ${
                     plan.highlighted 
                       ? "bg-card border-primary shadow-xl shadow-primary/10" 
                       : "bg-card border-border hover:border-primary/20"
                   }`}>
                     {plan.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                      <div className="absolute -top-2.5 sm:-top-3 left-1/2 -translate-x-1/2 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full bg-primary text-primary-foreground text-xs sm:text-sm font-medium whitespace-nowrap">
                         {plan.badge}
                       </div>
                     )}
                     
-                    <div className="text-center mb-6">
-                      <div className={`w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center ${
+                    <div className="text-center mb-4 sm:mb-6">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl mx-auto mb-3 sm:mb-4 flex items-center justify-center ${
                         plan.highlighted ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
                       }`}>
-                        <plan.icon className="w-6 h-6" />
+                        <plan.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
-                      <h3 className="text-xl font-semibold text-foreground">{plan.name}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
-                      <div className="mt-4">
-                        <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                      <h3 className="text-lg sm:text-xl font-semibold text-foreground">{plan.name}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">{plan.description}</p>
+                      <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                        <span className="text-3xl sm:text-4xl font-bold text-foreground">{plan.price}</span>
                         {plan.originalPrice && (
-                          <span className="text-lg text-muted-foreground line-through ml-2">{plan.originalPrice}</span>
+                          <span className="text-base sm:text-lg text-muted-foreground line-through">{plan.originalPrice}</span>
                         )}
                       </div>
                     </div>
                     
-                    <div className="space-y-3 mb-6">
+                    <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6 flex-grow">
                       {plan.features.map((feature) => (
-                        <div key={feature} className="flex items-center gap-2 text-sm">
-                          <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                          <span className="text-foreground">{feature}</span>
+                        <div key={feature} className="flex items-start sm:items-center gap-2 text-xs sm:text-sm">
+                          <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary flex-shrink-0 mt-0.5 sm:mt-0" />
+                          <span className="text-foreground leading-relaxed">{feature}</span>
                         </div>
                       ))}
                       {plan.notIncluded.map((feature) => (
-                        <div key={feature} className="flex items-center gap-2 text-sm opacity-50">
-                          <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
+                        <div key={feature} className="flex items-start sm:items-center gap-2 text-xs sm:text-sm opacity-50">
+                          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
                             <div className="w-1 h-1 rounded-full bg-muted-foreground" />
                           </div>
-                          <span className="text-muted-foreground">{feature}</span>
+                          <span className="text-muted-foreground leading-relaxed">{feature}</span>
                         </div>
                       ))}
                     </div>
                     
-                    <Link to="/waitlist" className="block">
-                      <Button 
-                        className="w-full" 
-                        variant={plan.highlighted ? "default" : "outline"}
-                      >
-                        {plan.cta}
-                      </Button>
-                    </Link>
+                    {plan.cta === "Contact Us" ? (
+                      <a href="mailto:contact@flagskool.com" className="block mt-auto">
+                        <Button 
+                          className="w-full text-sm sm:text-base" 
+                          variant={plan.highlighted ? "default" : "outline"}
+                          size="default"
+                        >
+                          {plan.cta}
+                        </Button>
+                      </a>
+                    ) : (
+                      <Link to="/waitlist" className="block mt-auto">
+                        <Button 
+                          className="w-full text-sm sm:text-base" 
+                          variant={plan.highlighted ? "default" : "outline"}
+                          size="default"
+                        >
+                          {plan.cta}
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </Tilt>
               </ScrollReveal>
@@ -193,41 +203,24 @@ const Pricing = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-16 px-6 bg-muted/30">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-muted/30">
         <div className="container mx-auto max-w-3xl">
           <ScrollReveal direction="down">
-            <h2 className="text-3xl font-bold text-foreground text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground text-center mb-8 sm:mb-12">
               Frequently Asked Questions
             </h2>
           </ScrollReveal>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {faqs.map((faq, index) => (
               <ScrollReveal key={faq.question} direction="up" delay={index * 50}>
-                <div className="p-6 rounded-xl bg-card border border-border">
-                  <h3 className="font-semibold text-foreground mb-2">{faq.question}</h3>
-                  <p className="text-muted-foreground text-sm">{faq.answer}</p>
+                <div className="p-4 sm:p-5 lg:p-6 rounded-lg sm:rounded-xl bg-card border border-border">
+                  <h3 className="font-semibold text-foreground mb-2 text-sm sm:text-base">{faq.question}</h3>
+                  <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{faq.answer}</p>
                 </div>
               </ScrollReveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Money Back Guarantee */}
-      <section className="py-16 px-6">
-        <div className="container mx-auto max-w-2xl text-center">
-          <ScrollReveal direction="up">
-            <div className="p-8 rounded-2xl bg-primary/5 border border-primary/20">
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                14-Day Money-Back Guarantee
-              </h3>
-              <p className="text-muted-foreground">
-                Try Flag Skool risk-free. If you're not completely satisfied within 14 days, 
-                we'll refund your entire payment. No questions asked.
-              </p>
-            </div>
-          </ScrollReveal>
         </div>
       </section>
 

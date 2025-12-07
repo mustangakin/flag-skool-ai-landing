@@ -1,17 +1,33 @@
+import { motion } from "framer-motion";
 import VideoPlayer from "@/components/ui/video-player";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 
 interface VideoSectionProps {
   videoUrl?: string;
+  youtubeVideoId?: string; // Add this new prop
   thumbnailUrl?: string;
   title?: string;
+  description?: string;
 }
 
+// Helper function to extract YouTube video ID from URL
+const getYouTubeVideoId = (url: string): string | null => {
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};
+
 const VideoSection = ({ 
-  videoUrl = "https://videos.pexels.com/video-files/30333849/13003128_2560_1440_25fps.mp4",
+  videoUrl,
+  youtubeVideoId,
   thumbnailUrl,
-  title = "See Flag Skool in Action"
+  title = "See Flag Skool in Action",
+  description
 }: VideoSectionProps) => {
+  // Determine if we should use YouTube embed
+  const youtubeId = youtubeVideoId || (videoUrl ? getYouTubeVideoId(videoUrl) : null);
+  const isYouTube = !!youtubeId;
+
   return (
     <section className="py-20 px-6 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -27,14 +43,33 @@ const VideoSection = ({
               {title}
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Watch how professionals are building AI solutions today
+              {description || title}
             </p>
           </div>
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={200}>
           <div className="relative group">
-            <VideoPlayer src={videoUrl} />
+            {isYouTube ? (
+              <motion.div
+                className="relative w-full max-w-4xl mx-auto rounded-xl overflow-hidden bg-[#11111198] shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1`}
+                    title={title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </motion.div>
+            ) : (
+              <VideoPlayer src={videoUrl || "https://videos.pexels.com/video-files/30333849/13003128_2560_1440_25fps.mp4"} />
+            )}
           </div>
         </ScrollReveal>
       </div>

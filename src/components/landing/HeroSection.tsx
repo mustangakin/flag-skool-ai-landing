@@ -1,11 +1,13 @@
 import WaitlistForm from "./WaitlistForm";
-import { Sparkles } from "lucide-react";
+import PricingPreview from "./PricingPreview";
+import { Sparkles, DollarSign } from "lucide-react";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import CountdownTimer from "@/components/CountdownTimer";
+import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
   const { ref: countRef, inView: countInView } = useInView({
@@ -98,8 +100,25 @@ const HeroSection = () => {
         </ScrollReveal>
         
         <ScrollReveal direction="up" delay={300}>
-          <div id="waitlist" className="flex justify-center mb-8">
+          <div id="waitlist" className="flex justify-center mb-6">
             <WaitlistForm />
+          </div>
+        </ScrollReveal>
+
+        {/* Pricing CTA */}
+        <ScrollReveal direction="up" delay={350}>
+          <div className="flex justify-center mb-8">
+            <PricingPreview>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 border-primary/30 hover:border-primary/50 hover:bg-primary/10 bg-card/80 backdrop-blur-sm shadow-lg"
+              >
+                <DollarSign className="w-5 h-5 text-primary" />
+                <span className="font-semibold">Check Out Our Pricing</span>
+                <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+              </Button>
+            </PricingPreview>
           </div>
         </ScrollReveal>
 

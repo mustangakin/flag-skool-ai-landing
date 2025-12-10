@@ -27,30 +27,32 @@ const WaitlistForm = ({ variant = "hero" }: WaitlistFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
-      <Input
-        type="email"
-        placeholder="Enter your email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="h-12 bg-background border-border text-foreground placeholder:text-muted-foreground"
-        required
-      />
-      <Button 
-        type="submit" 
-        disabled={isLoading}
-        className="h-12 px-6 whitespace-nowrap"
-      >
-        {isLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : (
-          <>
-            Join Priority Waitlist
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </>
-        )}
-      </Button>
-    </form>
+    <div className="w-full max-w-md flex flex-col items-center gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full">
+        <Input
+          type="email"
+          placeholder="Enter your email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="h-12 bg-background border-border text-foreground placeholder:text-muted-foreground"
+          required
+        />
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="h-12 px-6 whitespace-nowrap"
+        >
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <>
+              Join Priority Waitlist
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 };
 

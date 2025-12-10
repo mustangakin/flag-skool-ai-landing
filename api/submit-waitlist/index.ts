@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 
-  'https://resturantchat.app.n8n.cloud/webhook/fae982e4-a4e4-4c89-9653-f1085e9ae3ed';
+  'https://flagskool.app.n8n.cloud/webhook/fae982e4-a4e4-4c89-9653-f1085e9ae3ed';
 
 export default async function handler(
   request: VercelRequest,
